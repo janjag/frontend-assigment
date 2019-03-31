@@ -11,14 +11,13 @@ class Articles {
 
   async getArticles() {
     this.articlesList = []
-    console.log('[getArticles]', typeof(this.articlesList))
     this.categoriesList.forEach( cat => {
       fetch(`http://localhost:6010/articles/${cat}`)
         .then(res => res.json())
         .then(data => {
           this.articlesList.push(...data.articles)
         })
-        .catch( err => console.error(error));
+        .catch( err => console.error(err));
     })
   }
 
@@ -44,22 +43,50 @@ class Articles {
   }
 
   createArticleElement(element) {
-    return `
-      <article class="article" id="${element.id}">
-        <img class="article-img" src="${element.image}" alt="">
-        <div class="article-info">
-          <h2 class="article-title">${element.title}</h2>
-          <span class="article-date">${element.date}</span>
-          <p class="article-preamble">${element.preamble}</p>
-        </div>
-      </article>
-    `
+    const article = document.createElement('article');
+    article.classList.add('article')
+    article.id = element.id
+
+    const img = document.createElement('img')
+    img.classList.add('article-img')
+    img.src = element.image
+    img.alt = "Random image"
+    article.appendChild(img)
+
+    const info = document.createElement('div')
+    info.classList.add("article-info")
+
+    const title = document.createElement('h2')
+    title.classList.add('article-title')
+    title.innerText = element.title
+    
+    const date = document.createElement('span')
+    date.classList.add('article-date')
+    date.innerText = element.date
+
+    const preamble = document.createElement('p')
+    preamble.classList.add('article-preamble')
+    preamble.innerText = element.preamble
+
+    info.appendChild(title);
+    info.appendChild(date);
+    info.appendChild(preamble);
+
+    article.appendChild(info);
+
+    return article
   }
 
   render() {
-    const root = document.querySelector('.atricles-list');
-    root.innerHTML = '';
-    console.log('render', typeof(this.articlesList), this.articlesList, this.articlesList.length)
+    console.log('render', this.articlesList)
+    setTimeout( () => {
+      const root = document.querySelector('.atricles-list');
+      root.innerHTML = '';
+      this.articlesList.forEach( item => {
+        let el = this.createArticleElement(item);
+        root.appendChild(el)
+      })
+    }, 0)
   }
 
   async init() {
@@ -67,9 +94,9 @@ class Articles {
     this.getArticles();
     this.render();
     this.inputs.forEach( input => input.addEventListener('change', () => {
-      this.setActiveCategory(this.activeCategories())
-      this.getArticles()
-      this.render()
+      this.setActiveCategory(this.activeCategories());
+      this.getArticles();
+      this.render();
     }))
   }
 }

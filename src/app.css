@@ -1,0 +1,239 @@
+*, *::after, *::before {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --blue: #014f91;
+  --text: #323436;
+  --white: #e1e2e3;
+}
+
+html {
+  background-color: var(--white);
+  color: var(--text);
+  font-size: 62.5%;
+  font-family: sans-serif;
+  overflow-x: hidden;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.6rem;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.header,
+.footer {
+  background-color: var(--blue);
+  color: var(--white);
+  padding: 2rem;
+  text-align: center;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+.controls {
+  display: flex;
+  align-items: flex-start;
+  position: relative;
+}
+
+.sorting {
+  margin-left: auto;
+  text-align: right;
+}
+
+.filters {
+  color: var(--text);
+  position: absolute;
+  top: calc(100% + 2rem);
+  left: 0;
+  padding: 2rem;
+  text-align: left;
+  width: 15rem;
+}
+
+.filters legend {
+  color: var(--blue);
+  margin-bottom: 1em;
+}
+
+.fieldset {
+  position: relative;
+}
+.fieldset:not(:first-of-type) {
+  margin-top: .5em;
+}
+
+.checkbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+}
+
+.checkbox-label {
+  position: relative;
+}
+.checkbox-label::before {
+  content: '✓';
+  display: inline-flex;
+  vertical-align: text-top;
+  background-color: var(--white);
+  border: .1rem solid var(--blue);
+  color: var(--white);
+  font-size: 1rem;
+  border-radius: .3em;
+  margin-right: .3em;
+  padding: .1em .3em;
+  user-select: none;
+}
+.checkbox:checked + .checkbox-label::before {
+  background-color: var(--blue);
+}
+
+.custom-sort .checkbox-label {
+  padding-right: 2rem;
+}
+.custom-sort .checkbox-label::before,
+.custom-sort .checkbox-label::after {
+  content: '';
+  background-color: transparent;
+  border-radius: 0;
+  right: 0;
+  height: 0;
+  margin-right: 0;
+  padding: 0;
+  width: 0;
+}
+.custom-sort .checkbox-label::before {
+  position: absolute;
+  top: 0;
+  border-top: 0;
+  border-bottom: .8rem solid var(--text);
+  border-right: .4rem solid transparent;
+  border-left: .4rem solid transparent;
+}
+.custom-sort .checkbox-label::after {
+  position: absolute;
+  bottom: 0;
+  border-top: .8rem solid var(--white);
+  border-right: .4rem solid transparent;
+  border-left: .4rem solid transparent;
+}
+.custom-sort .checkbox:checked + .checkbox-label::before {
+  background-color: transparent;
+  border-bottom: .8rem solid var(--white);
+}
+.custom-sort .checkbox:checked + .checkbox-label::after {
+  background-color: transparent;
+  border-top: .8rem solid var(--text);
+}
+
+.main {
+  height: 100%;
+  flex-grow: 1;
+  padding: 2rem 2rem 2rem 15rem;
+}
+
+.article {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 1em;
+}
+.article-img {
+  flex-shrink: 0;
+  height: 18rem;
+  width: 28rem;
+  margin-bottom: 1rem;
+  margin-right: 1rem;
+}
+.article-info {
+  display: flex;
+  flex-wrap: wrap;
+}
+.article-title {
+  display: inline-block;
+  margin-bottom: 1em;
+  margin-right: 1rem;
+  width: calc(100% - 21rem)
+}
+.article-date {
+  display: inline-block;
+  text-align: right;
+  vertical-align: top;
+  width: 20rem;
+}
+.article-preamble {
+  width: 100%;
+}
+
+@media (max-width: 62em) {
+  .controls {
+    margin-top: 1em;
+  }
+  .filters {
+    color: var(--white);
+    padding: 0;
+    position: static;
+    white-space: nowrap;
+  }
+  .filters legend {
+    color: var(--white);
+  }
+  .filters .fieldset {
+    display: inline-block;
+    vertical-align: top;
+  }
+  .filters .fieldset:not(:first-of-type) {
+    margin-top: 0;
+    margin-left: 1rem;
+  }
+  .checkbox-label::before {
+    background-color: var(--text);
+    color: var(--text);
+  }
+  .checkbox:checked + .checkbox-label::before {
+    background-color: var(--white);
+    color: var(--blue);
+  }
+  .main {
+    padding: 2rem;
+  }
+  .article-info {
+    display: block;
+  }
+  .article-title,
+  .article-date {
+    display: block;
+    width: 100%;
+    text-align-last: left;
+  }
+  .article-preamble {
+    display: none;
+  }
+}
+
+@media (max-width: 42em) {
+  .article-img {
+    height: auto;
+    width: 40%;
+  }
+}
+
+@media (max-width: 30em) {
+  .article {
+    flex-wrap: wrap;
+    margin: 0 auto 1em;
+    max-width: 28rem;
+  }
+  .article-img {
+    width: 100%;
+  }
+}

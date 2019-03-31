@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title><%= htmlWebpackPlugin.options.title %></title>
+</head>
+<body>
+  <header class="header">
+    <h1 class="h1"><%= htmlWebpackPlugin.options.title %></h1>
+    <div class="controls">
+      <form class="filters">
+        <legend>Data sources</legend>
+        <fieldset class="fieldset category">
+          <input checked type="checkbox" name="cSports" id="cSports" class="checkbox" value="sports">
+          <label for="cSports" class="checkbox-label">Sports</label>
+        </fieldset>
+        <fieldset class="fieldset category">
+          <input checked type="checkbox" name="cFashion" id="cFashion" class="checkbox" value="fashion">
+          <label for="cFashion" class="checkbox-label">Fashion</label>
+        </fieldset>
+      </form>
+      <form class="sorting">
+        <fieldset class="fieldset custom-sort">
+          <input type="checkbox" name="sDate" id="sDate" class="checkbox" value="desc">
+          <label for="sDate" class="checkbox-label">Sort by date</label>
+        </fieldset>
+      </form>
+    </div>
+  </header>
+  <main class="main">
+    <div class="atricles-list">
+      <article class="article">
+        <img class="article-img" src="https://placeimg.com/280/180/nature" alt="">
+        <div class="article-info">
+          <h2 class="article-title">Vålerengas førsterekke smadrer rivalene: - Seriegullet er I våre hender</h2>
+          <span class="article-date">2. februar 2019</span>
+          <p class="article-preamble">MERÅKER (VG) Finn-Hågen Krogh (28) opplevde den gedigne nedturen da han ble vraket til OL-sprinten i Sotsji etter at han først var tatt ut på laget. Nå føler han seg aldri trygg på å få starte i mesterskap</p>
+        </div>
+      </article>
+    </div>
+  </main>
+  <footer class="footer">
+    <p class="copyright">&copy; <span class="year-now"></span></p>
+  </footer>
+</body>
+</html>

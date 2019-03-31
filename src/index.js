@@ -9,17 +9,21 @@ class Articles {
     this.categoriesList = null
   }
 
-  async getArticles() {
+  getArticles() {
     this.articlesList = []
-    this.categoriesList.forEach( cat => {
-      fetch(`http://localhost:6010/articles/${cat}`)
-        .then(res => res.json())
-        .then(data => {
-          this.articlesList.push(...data.articles)
-        })
-        .then(this.render())
-        .catch( err => console.error(err));
-    })
+    if (this.categoriesList.size > 0) {
+      this.categoriesList.forEach( cat => {
+        fetch(`http://localhost:6010/articles/${cat}`)
+          .then(res => res.json())
+          .then(data => {
+            this.articlesList.push(...data.articles)
+            this.render()
+          })
+          .catch( err => console.error(err));
+      })
+    } else {
+      this.render()
+    }
   }
 
   getArticleList() {
@@ -79,15 +83,12 @@ class Articles {
   }
 
   render() {
-    console.log('render', this.articlesList)
-    setTimeout( () => {
-      const root = document.querySelector('.atricles-list');
-      root.innerHTML = '';
-      this.articlesList.forEach( item => {
-        let el = this.createArticleElement(item);
-        root.appendChild(el)
-      })
-    }, 100)
+    const root = document.querySelector('.atricles-list');
+    root.innerHTML = '';
+    this.articlesList.forEach( item => {
+      let el = this.createArticleElement(item);
+      root.appendChild(el)
+    })
   }
 
   async init() {

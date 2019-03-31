@@ -7,6 +7,7 @@ class Articles {
     this.inputs = document.querySelectorAll('.category .checkbox'),
     this.articlesList = [],
     this.categoriesList = null
+    this.order = 'desc'
   }
 
   getArticles() {
@@ -16,6 +17,10 @@ class Articles {
         fetch(`http://localhost:6010/articles/${cat}`)
           .then(res => res.json())
           .then(data => {
+            let tmp = data.articles.map( article => {
+              console.log(article.date)
+              return article
+            })
             this.articlesList.push(...data.articles)
             this.render()
           })
@@ -43,7 +48,6 @@ class Articles {
         categories.delete(input.value)
       }
     });
-    console.log(categories)
     return categories
   }
 
@@ -91,7 +95,7 @@ class Articles {
     })
   }
 
-  async init() {
+  init() {
     this.setActiveCategory(this.activeCategories());
     this.getArticles();
     this.inputs.forEach( input => input.addEventListener('change', () => {
@@ -101,7 +105,7 @@ class Articles {
   }
 }
 
-async function init() {
+function init() {
   getYear();
   const reader = new Articles();
   reader.init();

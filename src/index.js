@@ -17,6 +17,7 @@ class Articles {
         .then(data => {
           this.articlesList.push(...data.articles)
         })
+        .then(this.render())
         .catch( err => console.error(err));
     })
   }
@@ -86,17 +87,15 @@ class Articles {
         let el = this.createArticleElement(item);
         root.appendChild(el)
       })
-    }, 0)
+    }, 100)
   }
 
   async init() {
     this.setActiveCategory(this.activeCategories());
     this.getArticles();
-    this.render();
     this.inputs.forEach( input => input.addEventListener('change', () => {
       this.setActiveCategory(this.activeCategories());
       this.getArticles();
-      this.render();
     }))
   }
 }

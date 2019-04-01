@@ -1,113 +1,33 @@
 import './app.css';
+import { getYear, inputs } from './services/util';
+import { getArticles } from './services/articles';
+import { render } from './services/render';
 
-const getYear = () => document.querySelector('.year-now').innerHTML = new Date().getFullYear();
 
-class Articles {
-  constructor() {
-    this.inputs = document.querySelectorAll('.category .checkbox'),
-    this.articlesList = [],
-    this.categoriesList = null
-    this.order = 'desc'
-  }
-
-  getArticles() {
-    this.articlesList = []
-    if (this.categoriesList.size > 0) {
-      this.categoriesList.forEach( cat => {
-        fetch(`http://localhost:6010/articles/${cat}`)
-          .then(res => res.json())
-          .then(data => {
-            let tmp = data.articles.map( article => {
-              console.log(article.date)
-              return article
-            })
-            this.articlesList.push(...data.articles)
-            this.render()
-          })
-          .catch( err => console.error(err));
-      })
-    } else {
-      this.render()
+function checkActiveCategories() {
+  let categories = [];
+  inputs.forEach( input => {
+    if (input.checked) {
+      categories.push(input.value);
     }
-  }
+  });
+  return categories;
+}
 
-  getArticleList() {
-    return this.articlesList
-  }
-
-  setActiveCategory(category) {
-    this.categoriesList = category
-  }
-
-  activeCategories() {
-    let categories = new Set();
-    this.inputs.forEach( input => {
-      if (input.checked) {
-        categories.add(input.value)
-      } else {
-        categories.delete(input.value)
-      }
-    });
-    return categories
-  }
-
-  createArticleElement(element) {
-    const article = document.createElement('article');
-    article.classList.add('article')
-    article.id = element.id
-
-    const img = document.createElement('img')
-    img.classList.add('article-img')
-    img.src = element.image
-    img.alt = "Random image"
-    article.appendChild(img)
-
-    const info = document.createElement('div')
-    info.classList.add("article-info")
-
-    const title = document.createElement('h2')
-    title.classList.add('article-title')
-    title.innerText = element.title
-    
-    const date = document.createElement('span')
-    date.classList.add('article-date')
-    date.innerText = element.date
-
-    const preamble = document.createElement('p')
-    preamble.classList.add('article-preamble')
-    preamble.innerText = element.preamble
-
-    info.appendChild(title);
-    info.appendChild(date);
-    info.appendChild(preamble);
-
-    article.appendChild(info);
-
-    return article
-  }
-
-  render() {
-    const root = document.querySelector('.atricles-list');
-    root.innerHTML = '';
-    this.articlesList.forEach( item => {
-      let el = this.createArticleElement(item);
-      root.appendChild(el)
-    })
-  }
-
-  init() {
-    this.setActiveCategory(this.activeCategories());
-    this.getArticles();
-    this.inputs.forEach( input => input.addEventListener('change', () => {
-      this.setActiveCategory(this.activeCategories());
-      this.getArticles();
-    }))
-  }
+function handleCategoryChange() {
+  inputs.forEach( input => input.addEventListener('change', event => {
+    getArticles(checkActiveCategories())
+      .then(all => {
+        render(all);
+      });
+  }))
 }
 
 function init() {
   getYear();
-  const reader = new Articles();
-  reader.init();
+  getArticles()
+    .then(all => render(all));
+  handleCategoryChange();
 }
+
 init();

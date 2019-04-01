@@ -1,13 +1,5 @@
 import Moment from 'moment';
 
-Moment.locale('nb');
-
-export const getYear = () => document.querySelector('.year-now').innerHTML = new Date().getFullYear();
-
-export const filters = document.querySelectorAll('.category .checkbox');
-
-export const sortOptions = document.querySelectorAll('.sorting .checkbox');
-
 export const Category = {
   ALL: 'all',
   FASHION: 'fashion',
@@ -20,8 +12,21 @@ export const Sort = {
 }
 
 export function sortByDate(data = [], order = Sort.DESC) {
-  const sortedArray = data.sort((a,b) => new Moment(a.date).format('YYYYMMDD') - new Moment(b.date).format('YYYYMMDD'))
+  Moment.locale('nb');
+  const direction = Sort.DESC ? 1 : -1;
 
-  console.log(sortedArray)
+  const sortedArray = data.sort((a, b) => {
+      const firstDate = Moment.utc(a.date).unix();
+      const secondDate = Moment.utc(b.date).unix();
+
+      if (!firstDate) {
+          return 1 * direction;
+      } else if (!secondDate) {
+          return -1 * direction;
+      } else {
+          return (firstDate - secondDate) * direction;
+      }
+  });
+
   return sortedArray;
 }

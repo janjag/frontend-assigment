@@ -1,7 +1,8 @@
 import './app.css';
-import { getYear, filters, Sort, sortOptions, sortByDate } from './services/util';
+import { Sort, sortByDate } from './services/util';
+import { getYear, sortOptions, filters } from './view/util';
 import { getArticles } from './services/articles';
-import { render } from './services/render';
+import { render } from './view/render';
 
 class App {
   constructor() {
@@ -9,19 +10,8 @@ class App {
     this.sort = Sort.DESC
   }
 
-  checkActiveCategories() {
-    let localCategories = [];
-    filters.forEach( input => {
-      if (input.checked) {
-        localCategories.push(input.value);
-      }
-    });
-    this.categories = [...localCategories]
-  }
-
-  handleCategoryChange() {
+  categoryChangeListener() {
     filters.forEach( input => input.addEventListener('change', event => {
-      this.checkActiveCategories();
       getArticles(this.categories, this.sort)
         .then(all => {
           render(all);
@@ -29,20 +19,9 @@ class App {
     }))
   }
 
-  checkActiveSorting() {
-    sortOptions.forEach( input => {
-      if (input.checked) {
-        this.sort = Sort.ASC
-      } else {
-        this.sort = Sort.DESC
-      }
-    });
-  }
-
-  handleSortingChange() {
+  sortingChangeListener() {
     sortOptions.forEach( input => input.addEventListener('change', event => {
-      this.checkActiveSorting();
-      getArticles(this.categories)
+      getArticles(this.categories, this.sort)
         .then(all => {
           render(all);
         });
@@ -50,9 +29,8 @@ class App {
   }
 
   init() {
-    this.checkActiveCategories();
-    this.handleCategoryChange();
-    this.handleSortingChange();
+    this.sortingChangeListener();
+    this.categoryChangeListener();
   }
 }
 

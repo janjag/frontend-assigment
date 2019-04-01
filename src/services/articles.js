@@ -31,5 +31,15 @@ export function getArticles( cat = Category.ALL) {
             ...curr
           ]
         }, [])
+    })
+    .catch(error => {
+      console.error('error handled: ', error);
+      return [{
+        id: 0,
+        title: "ERROR?!",
+        image: "https://placeimg.com/280/180",
+        date: new Date(),
+        preamble: 'Please refresh the page'
+      }]
     });
 }

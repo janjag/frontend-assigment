@@ -13,25 +13,25 @@ export function createArticleElement(element) {
   return article;
 }
 
-export function createCategoryFilters(element, listner) {
+export function createCategoryFilters(element, listener) {
   const fieldset = document.createElement('fieldset');
   fieldset.classList.add('fieldset','category');
   const markup = `
-    <input checked type="checkbox" name="c${element}" id="c${element}" class="checkbox" value="sports">
+    <input checked type="checkbox" name="c${element}" id="c${element}" class="checkbox" value="${element}">
     <label for="c${element}" class="checkbox-label">${element.charAt(0).toUpperCase() + element.slice(1)}</label>
   `;
   fieldset.innerHTML = markup;
-  fieldset.querySelector('input').addEventListener('change', listner);
+  fieldset.querySelector('input').addEventListener('change', listener);
 
   return fieldset
 }
 
-export function renderCategoryFilters(list, listner) {
+export function renderCategoryFilters(list, listener) {
   let categories = Object.values(list)
   .filter( value => value !== list.ALL );
   const root = document.querySelector('.filters');
   categories.map( cat => {
-    let el = createCategoryFilters(cat, listner);
+    let el = createCategoryFilters(cat, listener);
     root.appendChild(el)
   });
 }

@@ -11,7 +11,8 @@ class App {
     this.attachCategoryChangeListeners = this.attachCategoryChangeListeners.bind(this)
   }
 
-  attachCategoryChangeListeners() {
+  attachCategoryChangeListeners(event) {
+    console.log(this.categories)
     const {
       value,
       checked
@@ -54,7 +55,7 @@ function init() {
   getYear();
   getArticles()
     .then(all => renderArticles(sortByDate(all)));
-  const app = new App([ Category.SPORTS, Category.SPORTS ]);
+  const app = new App([ Category.SPORTS, Category.FASHION ]);
   app.init();
 }
 

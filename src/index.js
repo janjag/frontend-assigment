@@ -2,33 +2,32 @@ import './app.css';
 import { Sort, sortByDate, Category } from './services/util';
 import { getYear, sortOptions, filters } from './view/util';
 import { getArticles } from './services/articles';
-import { renderArticles } from './view/render';
+import { renderArticles, renderCategoryFilters } from './view/render';
 
 class App {
   constructor(categories = []) {
     this.categories = categories,
     this.sort = Sort.DESC
+    this.attachCategoryChangeListeners = this.attachCategoryChangeListeners.bind(this)
   }
 
   attachCategoryChangeListeners() {
-    filters.forEach( input => input.addEventListener('change', event => {
-      const {
-        value,
-        checked
-      } = event.target;
+    const {
+      value,
+      checked
+    } = event.target;
 
-      const inCategoriesIndex = this.categories.indexOf(value);
+    const inCategoriesIndex = this.categories.indexOf(value);
 
-      if (checked && inCategoriesIndex === -1) {
-          this.categories.push(value);
-      } else if (!checked && inCategoriesIndex !== -1) {
-          this.categories.splice(inCategoriesIndex, 1);
-      }
+    if (checked && inCategoriesIndex === -1) {
+        this.categories.push(value);
+    } else if (!checked && inCategoriesIndex !== -1) {
+        this.categories.splice(inCategoriesIndex, 1);
+    }
 
-      getArticles(this.categories)
-        .then(all => sortByDate(all, this.sort))
-        .then(sorted => renderArticles(sorted));
-    }))
+    getArticles(this.categories)
+      .then(all => sortByDate(all, this.sort))
+      .then(sorted => renderArticles(sorted));
   }
 
   attachSortingChangeListeners() {
@@ -47,7 +46,7 @@ class App {
 
   init() {
     this.attachSortingChangeListeners();
-    this.attachCategoryChangeListeners();
+    renderCategoryFilters(Category, this.attachCategoryChangeListeners.bind(this));
   }
 }
 

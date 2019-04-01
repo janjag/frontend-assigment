@@ -28,6 +28,5 @@ export function sortByDate(data = [], order = Sort.DESC) {
       }
   });
 
-  console.log(sortedArray)
   return sortedArray;
 }

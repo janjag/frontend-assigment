@@ -13,7 +13,30 @@ export function createArticleElement(element) {
   return article;
 }
 
-export function render(articlesList) {
+export function createCategoryFilters(element, listner) {
+  const fieldset = document.createElement('fieldset');
+  fieldset.classList.add('fieldset','category');
+  const markup = `
+    <input checked type="checkbox" name="c${element}" id="c${element}" class="checkbox" value="sports">
+    <label for="c${element}" class="checkbox-label">${element.charAt(0).toUpperCase() + element.slice(1)}</label>
+  `;
+  fieldset.innerHTML = markup;
+  fieldset.querySelector('input').addEventListener('change', listner);
+
+  return fieldset
+}
+
+export function renderCategoryFilters(list, listner) {
+  let categories = Object.values(list)
+  .filter( value => value !== list.ALL );
+  const root = document.querySelector('.filters');
+  categories.map( cat => {
+    let el = createCategoryFilters(cat, listner);
+    root.appendChild(el)
+  });
+}
+
+export function renderArticles(articlesList) {
   const root = document.querySelector('.atricles-list');
   root.innerHTML = '';
   articlesList.map( article => {

@@ -1,36 +1,53 @@
 import './app.css';
-import { Sort, sortByDate } from './services/util';
+import { Sort, sortByDate, Category } from './services/util';
 import { getYear, sortOptions, filters } from './view/util';
 import { getArticles } from './services/articles';
 import { render } from './view/render';
 
 class App {
-  constructor() {
-    this.categories = [],
+  constructor(categories = []) {
+    this.categories = categories,
     this.sort = Sort.DESC
   }
 
-  categoryChangeListener() {
+  attachCategoryChangeListeners() {
     filters.forEach( input => input.addEventListener('change', event => {
-      getArticles(this.categories, this.sort)
-        .then(all => {
-          render(all);
-        });
+      const {
+        value,
+        checked
+      } = event.target;
+
+      const inCategoriesIndex = this.categories.indexOf(value);
+
+      if (checked && inCategoriesIndex === -1) {
+          this.categories.push(value);
+      } else if (!checked && inCategoriesIndex !== -1) {
+          this.categories.splice(inCategoriesIndex, 1);
+      }
+
+      getArticles(this.categories)
+        .then(all => sortByDate(all, this.sort))
+        .then(sorted => render(sorted));
     }))
   }
 
-  sortingChangeListener() {
+  attachSortingChangeListeners() {
     sortOptions.forEach( input => input.addEventListener('change', event => {
-      getArticles(this.categories, this.sort)
-        .then(all => {
-          render(all);
-        });
+      const {
+        checked
+      } = event.target;
+
+      this.sort = checked ? Sort.ASC : Sort.DESC;
+
+      getArticles(this.categories)
+        .then(all => sortByDate(all, this.sort))
+        .then(sorted => render(sorted));
     }))
   }
 
   init() {
-    this.sortingChangeListener();
-    this.categoryChangeListener();
+    this.attachSortingChangeListeners();
+    this.attachCategoryChangeListeners();
   }
 }
 
@@ -38,7 +55,7 @@ function init() {
   getYear();
   getArticles()
     .then(all => render(sortByDate(all)));
-  const app = new App();
+  const app = new App([ Category.SPORTS, Category.SPORTS ]);
   app.init();
 }
 

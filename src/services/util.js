@@ -12,21 +12,22 @@ export const Sort = {
 }
 
 export function sortByDate(data = [], order = Sort.DESC) {
-  Moment.locale('nb');
-  const direction = Sort.DESC ? 1 : -1;
+  const direction = order === Sort.DESC ? 1 : -1;
 
   const sortedArray = data.sort((a, b) => {
-      const firstDate = Moment.utc(a.date).unix();
-      const secondDate = Moment.utc(b.date).unix();
+      const firstDate = new Moment(a.date);
+      const secondDate = new Moment(b.date);
 
-      if (!firstDate) {
+      if (!firstDate.isValid()) {
           return 1 * direction;
-      } else if (!secondDate) {
+      } else if (!secondDate.isValid()) {
           return -1 * direction;
       } else {
-          return (firstDate - secondDate) * direction;
+          const diff = firstDate.toDate().getTime() - secondDate.toDate().getTime();
+          return diff === 0 ? 0 : diff * direction;
       }
   });
 
+  console.log(sortedArray)
   return sortedArray;
 }

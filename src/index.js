@@ -2,7 +2,7 @@ import './app.css';
 import { Sort, sortByDate, Category } from './services/util';
 import { getYear, sortOptions, filters } from './view/util';
 import { getArticles } from './services/articles';
-import { render } from './view/render';
+import { renderArticles } from './view/render';
 
 class App {
   constructor(categories = []) {
@@ -27,7 +27,7 @@ class App {
 
       getArticles(this.categories)
         .then(all => sortByDate(all, this.sort))
-        .then(sorted => render(sorted));
+        .then(sorted => renderArticles(sorted));
     }))
   }
 
@@ -41,7 +41,7 @@ class App {
 
       getArticles(this.categories)
         .then(all => sortByDate(all, this.sort))
-        .then(sorted => render(sorted));
+        .then(sorted => renderArticles(sorted));
     }))
   }
 
@@ -54,7 +54,7 @@ class App {
 function init() {
   getYear();
   getArticles()
-    .then(all => render(sortByDate(all)));
+    .then(all => renderArticles(sortByDate(all)));
   const app = new App([ Category.SPORTS, Category.SPORTS ]);
   app.init();
 }

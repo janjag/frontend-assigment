@@ -12,7 +12,6 @@ class App {
   }
 
   attachCategoryChangeListeners(event) {
-    console.log(this.categories)
     const {
       value,
       checked

@@ -157,6 +157,7 @@ body {
 .article-info {
   display: flex;
   flex-wrap: wrap;
+  width: 100%;
 }
 .article-title {
   display: inline-block;
